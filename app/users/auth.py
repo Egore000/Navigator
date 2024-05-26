@@ -1,4 +1,5 @@
-import datetime
+from datetime import datetime, timedelta, UTC
+
 from passlib.context import CryptContext
 from jose import jwt
 from pydantic import EmailStr
@@ -21,7 +22,7 @@ def verify_password(plain_password: str, hashed_password: str) -> bool:
 
 def create_access_token(data: dict) -> str:
     to_encode = data.copy()
-    expire = datetime.datetime.now(datetime.UTC)
+    expire = datetime.now(UTC) + timedelta(minutes=30)
     to_encode.update({"exp": expire})
     
     encoded_jwt = jwt.encode(

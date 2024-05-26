@@ -18,3 +18,5 @@ class Settings(BaseSettings):
         env_file = ".env"
 
 settings = Settings()
+
+booking_access_token = "booking_access_token"
