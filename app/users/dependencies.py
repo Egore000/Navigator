@@ -5,14 +5,16 @@ from jose import jwt, JWTError
 
 from users.models import Users
 from users.service import UsersService
+
 from config import settings, booking_access_token
+import exceptions
 
 
 
 def get_token(request: Request):
     token = request.cookies.get(booking_access_token)
     if not token:
-        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED)
+        raise exceptions.TokenAbsentException
     return token
 
 
@@ -22,24 +24,25 @@ async def get_current_user(token: str = Depends(get_token)) -> Users:
             token, settings.SECRET_KEY, settings.ALGORITHM
         )
     except JWTError:
-        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED)
+        raise exceptions.IncorrectTokenFormatException
     
     expire: str = payload.get("exp")
     if (not expire) or (int(expire) < datetime.now(UTC).timestamp()):
-        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED)
+        raise exceptions.TokenExpiredException
 
     user_id: str = payload.get("sub")
     if not user_id:
-        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED)
-    user = await UsersService.get_one_or_none(id=int(user_id))
+        raise exceptions.UserDoesNotExistsException
     
+    user = await UsersService.get_one_or_none(id=int(user_id))
     if not user:
-        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED)
+        raise exceptions.UserDoesNotExistsException
     
     return user
 
 
 async def get_current_admin_user(current_user: Users = Depends(get_current_user)):
     if current_user.role != "admin":
-        raise HTTPException(status_code=status.HTTP_403_FORBIDDEN)
+        raise exceptions.AccessForbiddenException
+    
     return current_user
