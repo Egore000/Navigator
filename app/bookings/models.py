@@ -1,8 +1,8 @@
 from sqlalchemy import (
-    JSON, Column, Computed, Date, 
-    ForeignKey, Integer, String
+    Column, Computed, Date, 
+    ForeignKey, Integer
 )
-from app.database import Base
+from database import Base
 
 
 class Bookings(Base):
