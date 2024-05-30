@@ -31,3 +31,10 @@ async def add_booking(
     if not booking:
         raise RoomCannotBeBooked
 
+
+@router.delete("/{booking_id}")
+async def delete_booking(
+    booking_id: int,
+    user: User = Depends(get_current_user)
+):
+    await BookingService.delete(id=booking_id)
