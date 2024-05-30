@@ -41,3 +41,8 @@ class UserDoesNotExistsException(BookingException):
 class AccessForbiddenException(BookingException):
     status_code = status.HTTP_403_FORBIDDEN
     detail = "Доступ запрещён" 
+
+
+class RoomCannotBeBooked(BookingException):
+    status_code = status.HTTP_409_CONFLICT
+    detail = "Не осталось свободных номеров"
