@@ -1,8 +1,11 @@
-from fastapi import APIRouter
+from datetime import date, datetime, timedelta
+from fastapi import APIRouter, Query, Depends
 
-from hotels.rooms.models import Rooms
-from hotels.rooms.service import RoomsService
-
+from app import exceptions
+from app.hotels.rooms.models import Rooms
+from app.hotels.rooms.service import RoomsService
+from app.users.dependencies import get_current_user
+from app.users.models import User
 
 router = APIRouter(
     prefix="/hotel/{hotel_id}/rooms",
@@ -11,7 +14,19 @@ router = APIRouter(
 
 
 @router.get("")
-async def get_rooms(
-    hotel_id: int
+async def get_rooms_by_time(
+    hotel_id: int,
+    date_from: date = Query(..., description=f"Например, {datetime.now().date()}"),
+    date_to: date = Query(..., description=f"Например, {datetime.now().date() + timedelta(days=1)}")
 ):
-    return await RoomsService.get_all(hotel_id)
+    return await RoomsService.search_for_room(hotel_id, date_from, date_to)
+
+
+@router.get("/all")
+async def get_all_rooms(
+    hotel_id: int,
+    user: User = Depends(get_current_user)
+):
+    if user.role == "admin":
+        return await RoomsService.get_all(hotel_id)
+    raise exceptions.AccessForbiddenException

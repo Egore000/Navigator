@@ -1,5 +1,6 @@
 from sqlalchemy import JSON, Column, ForeignKey, Integer, String
-from database import Base
+
+from app.database import Base
 
 
 class Rooms(Base):

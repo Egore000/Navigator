@@ -1,5 +1,5 @@
-from core.base import BaseService
-from users.models import User
+from app.core.base import BaseService
+from app.users.models import User
 
 
 class UsersService(BaseService):

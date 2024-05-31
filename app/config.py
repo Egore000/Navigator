@@ -1,4 +1,4 @@
-from pydantic import BaseSettings, root_validator
+from pydantic import BaseSettings
 
 
 class Settings(BaseSettings):
@@ -15,7 +15,8 @@ class Settings(BaseSettings):
         return f"postgresql+asyncpg://{self.DB_USER}:{self.DB_PASS}@{self.DB_HOST}:{self.DB_PORT}/{self.DB_NAME}"
 
     class Config:
-        env_file = ".env"
+        env_file = "../.env"
+
 
 settings = Settings()
 

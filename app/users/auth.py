@@ -4,9 +4,10 @@ from passlib.context import CryptContext
 from jose import jwt
 from pydantic import EmailStr
 
-from users.models import User
-from users.service import UsersService
-from config import settings
+from app.config import settings
+
+from app.users.models import User
+from app.users.service import UsersService
 
 
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
@@ -31,7 +32,7 @@ def create_access_token(data: dict) -> str:
     return encoded_jwt
 
 
-async def authenticate_user(email: EmailStr, password: str) -> User|None:
+async def authenticate_user(email: EmailStr, password: str) -> User | None:
     user = await UsersService.get_one_or_none(email=email)
     if user and verify_password(password, user.hashed_password):
         return user

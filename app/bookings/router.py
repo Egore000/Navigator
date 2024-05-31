@@ -1,14 +1,14 @@
 from datetime import date
-from fastapi import APIRouter, Depends, Request
+from fastapi import APIRouter, Depends
 
-from exceptions import RoomCannotBeBooked
+from app.exceptions import RoomCannotBeBooked
 
-from users.dependencies import get_current_user
-from users.models import User
+from app.users.dependencies import get_current_user
+from app.users.models import User
 
-from bookings.schemas import Booking
-from bookings.service import BookingService
-from bookings.models import Bookings
+from app.bookings.schemas import BookingScheme
+from app.bookings.service import BookingService
+from app.bookings.models import Bookings
 
 
 router = APIRouter(
@@ -18,7 +18,7 @@ router = APIRouter(
 
 
 @router.get("")
-async def get_bookings(user: User = Depends(get_current_user)) -> list[Booking]:
+async def get_bookings(user: User = Depends(get_current_user)) -> list[BookingScheme]:
     return await BookingService.get_all(user_id=user.id)
 
 
@@ -37,4 +37,4 @@ async def delete_booking(
     booking_id: int,
     user: User = Depends(get_current_user)
 ):
-    await BookingService.delete(id=booking_id)
+    await BookingService.delete(item_id=booking_id)

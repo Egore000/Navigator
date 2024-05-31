@@ -2,12 +2,11 @@ from datetime import date
 
 from sqlalchemy import insert
 
-from core.base import BaseService
-from bookings.models import Bookings
-from hotels.rooms.service import RoomsService 
+from app.core.base import BaseService
+from app.bookings.models import Bookings
+from app.hotels.rooms.service import RoomsService
 
-from database import async_session_maker
-
+from app.database import async_session_maker
 
 
 class BookingService(BaseService):

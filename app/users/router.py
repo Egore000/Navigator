@@ -1,13 +1,15 @@
-from fastapi import APIRouter, Depends, HTTPException, Response, status
+from typing import Annotated
 
-from users.dependencies import get_current_admin_user, get_current_user
-from users.auth import authenticate_user, create_access_token, get_password_hash, verify_password
-from users.schemas import UserAuth
-from users.models import User
-from users.service import UsersService
+from fastapi import APIRouter, Depends, Response
 
-from config import booking_access_token
-import exceptions
+from app.config import booking_access_token
+from app import exceptions
+
+from app.users.dependencies import get_current_admin_user, get_current_user
+from app.users.auth import authenticate_user, create_access_token, get_password_hash
+from app.users.schemas import UserAuth
+from app.users.models import User
+from app.users.service import UsersService
 
 
 router = APIRouter(
@@ -17,7 +19,7 @@ router = APIRouter(
 
 
 @router.post("/register")
-async def register_user(user_data: UserAuth):
+async def register_user(user_data: Annotated[UserAuth, Depends()]):
     existing_user: User = await UsersService.get_one_or_none(email=user_data.email)
 
     if existing_user:
@@ -33,14 +35,14 @@ async def register_user(user_data: UserAuth):
 @router.post("/login")
 async def login_user(
     response: Response, 
-    user_data: UserAuth
+    user_data: Annotated[UserAuth, Depends()]
 ):
     user = await authenticate_user(user_data.email, user_data.password)
     if not user:
         raise exceptions.IncorrectEmailOrPasswordException
     access_token = create_access_token({"sub": str(user.id)})
     response.set_cookie(booking_access_token, access_token, httponly=True)
-    return {"access_token": access_token }
+    return {"access_token": access_token}
 
 
 @router.post("/logout")

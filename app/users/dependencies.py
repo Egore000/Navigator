@@ -1,14 +1,13 @@
 from datetime import datetime, UTC
 
-from fastapi import Depends, HTTPException, Request, status
+from fastapi import Depends, Request
 from jose import jwt, JWTError
 
-from users.models import User
-from users.service import UsersService
+from app import exceptions
+from app.config import settings, booking_access_token
 
-from config import settings, booking_access_token
-import exceptions
-
+from app.users.models import User
+from app.users.service import UsersService
 
 
 def get_token(request: Request) -> str:

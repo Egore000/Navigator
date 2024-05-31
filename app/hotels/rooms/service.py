@@ -1,11 +1,11 @@
 from datetime import date
 from sqlalchemy import and_, func, or_, select
 
-from core.base import BaseService
-from bookings.models import Bookings
-from hotels.rooms.models import Rooms
+from app.database import async_session_maker
 
-from database import async_session_maker
+from app.core.base import BaseService
+from app.bookings.models import Bookings
+from app.hotels.rooms.models import Rooms
 
 
 class RoomsService(BaseService):
