@@ -1,3 +1,4 @@
+from enum import Enum
 from datetime import datetime, UTC
 
 from fastapi import Depends, Request
@@ -8,6 +9,12 @@ from app.config import settings, booking_access_token
 
 from app.users.models import User
 from app.users.service import UsersService
+
+
+class UserRole(str, Enum):
+    admin = "admin"
+    moderator = "moderator"
+    user = "user"
 
 
 def get_token(request: Request) -> str:
@@ -24,7 +31,7 @@ async def get_current_user(token: str = Depends(get_token)) -> User:
         )
     except JWTError:
         raise exceptions.IncorrectTokenFormatException
-    
+
     expire: str = payload.get("exp")
     if (not expire) or (int(expire) < datetime.now(UTC).timestamp()):
         raise exceptions.TokenExpiredException
@@ -32,16 +39,21 @@ async def get_current_user(token: str = Depends(get_token)) -> User:
     user_id: str = payload.get("sub")
     if not user_id:
         raise exceptions.UserDoesNotExistsException
-    
+
     user = await UsersService.get_one_or_none(id=int(user_id))
     if not user:
         raise exceptions.UserDoesNotExistsException
-    
+
     return user
 
 
-async def get_current_admin_user(current_user: User = Depends(get_current_user)):
-    if current_user.role != "admin":
+async def get_current_admin_user(current_user: User = Depends(get_current_user)) -> User:
+    if current_user.role is not UserRole.admin:
         raise exceptions.AccessForbiddenException
-    
+    return current_user
+
+
+async def get_current_moderator_user(current_user: User = Depends(get_current_user)) -> User:
+    if current_user.role not in (UserRole.admin, UserRole.moderator):
+        raise exceptions.AccessForbiddenException
     return current_user

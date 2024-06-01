@@ -88,8 +88,8 @@ class RoomsService(BaseService):
         GROUP BY rooms.quantity, booked_rooms.room_id
         """
         booked_rooms = await cls._get_booked_rooms(
-                room_id=room_id, 
-                date_from=date_from, 
+                room_id=room_id,
+                date_from=date_from,
                 date_to=date_to
             )
         return select(

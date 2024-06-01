@@ -1,9 +1,9 @@
 from sqlalchemy import JSON, Column, Integer, String
 
-from app.database import Base
+from app.database import Model
 
 
-class Hotels(Base):
+class Hotels(Model):
     __tablename__ = "hotels"
 
     id = Column(Integer, primary_key=True)

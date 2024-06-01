@@ -7,18 +7,22 @@ from app import exceptions
 
 from app.users.dependencies import get_current_admin_user, get_current_user
 from app.users.auth import authenticate_user, create_access_token, get_password_hash
-from app.users.schemas import UserAuth
+from app.users.schemas import UserAuth, UserData
 from app.users.models import User
 from app.users.service import UsersService
 
 
-router = APIRouter(
+router_auth = APIRouter(
     prefix='/auth',
-    tags=['Auth & Пользователи']
+    tags=['Аутентификация']
 )
 
+router_users = APIRouter(
+    prefix='/users',
+    tags=['Пользователи']
+)
 
-@router.post("/register")
+@router_auth.post("/register")
 async def register_user(user_data: Annotated[UserAuth, Depends()]):
     existing_user: User = await UsersService.get_one_or_none(email=user_data.email)
 
@@ -27,14 +31,14 @@ async def register_user(user_data: Annotated[UserAuth, Depends()]):
     
     hashed_password = get_password_hash(user_data.password)
     await UsersService.add(
-        email=user_data.email, 
+        email=user_data.email,
         hashed_password=hashed_password
     )
 
 
-@router.post("/login")
+@router_auth.post("/login")
 async def login_user(
-    response: Response, 
+    response: Response,
     user_data: Annotated[UserAuth, Depends()]
 ):
     user = await authenticate_user(user_data.email, user_data.password)
@@ -45,16 +49,16 @@ async def login_user(
     return {"access_token": access_token}
 
 
-@router.post("/logout")
+@router_auth.post("/logout")
 async def logout_user(response: Response):
     response.delete_cookie(booking_access_token)
 
 
-@router.get("/me")
-async def read_users_me(current_user: User = Depends(get_current_user)):
+@router_users.get("/me")
+async def read_me(current_user: User = Depends(get_current_user)) -> UserData:
     return current_user
 
 
-@router.get("/all")
-async def read_users_all(current_user: User = Depends(get_current_admin_user)):
+@router_users.get("/all")
+async def read_all_users(current_user: User = Depends(get_current_admin_user)) -> list[UserData]:
     return await UsersService.get_all()

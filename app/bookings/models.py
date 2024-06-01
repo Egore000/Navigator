@@ -1,11 +1,11 @@
 from sqlalchemy import (
-    Column, Computed, Date, 
+    Column, Computed, Date,
     ForeignKey, Integer
 )
-from app.database import Base
+from app.database import Model
 
 
-class Bookings(Base):
+class Bookings(Model):
     __tablename__ = "bookings"
 
     id = Column(Integer, primary_key=True)
