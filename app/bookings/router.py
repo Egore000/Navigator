@@ -3,13 +3,11 @@ from fastapi import APIRouter, Depends
 
 from app.exceptions import RoomCannotBeBooked
 
-from app.users.dependencies import get_current_user
+from app.users.auth.dependencies import get_current_user
 from app.users.models import User
 
 from app.bookings.schemas import BookingScheme
 from app.bookings.service import BookingService
-from app.bookings.models import Bookings
-
 
 router = APIRouter(
     prefix="/bookings",

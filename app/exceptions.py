@@ -51,3 +51,12 @@ class RoomCannotBeBooked(BookingException):
 class NotFoundError(BookingException):
     status_code = status.HTTP_404_NOT_FOUND
     detail = "Объект не найден"
+
+
+class IncorrectTokenTypeError(Exception):
+    pass
+
+
+class IncorrectTokenError(BookingException):
+    status_code = status.HTTP_401_UNAUTHORIZED
+    detail = "Неверный тип токена"

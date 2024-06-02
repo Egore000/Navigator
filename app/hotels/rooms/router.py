@@ -4,14 +4,15 @@ from fastapi import APIRouter, Query, Depends
 from app import exceptions
 from app.hotels.rooms.schemas import RoomScheme, RoomInfo
 from app.hotels.rooms.service import RoomsService
-from app.users.dependencies import get_current_user, UserRole
+from app.users.auth.dependencies import get_current_user
+from app.users.permissions import UserRole
 from app.users.models import User
+
 
 router = APIRouter(
     prefix="/hotel/{hotel_id}/rooms",
     tags=["Комнаты"]
 )
-
 
 @router.get("")
 async def get_rooms_by_time(

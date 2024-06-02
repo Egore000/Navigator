@@ -1,13 +1,7 @@
 from pydantic import BaseModel, EmailStr
-from app.users.dependencies import UserRole
 
-
-class UserAuth(BaseModel):
-    email: EmailStr
-    password: str
-
-    class Config:
-        orm_mode = True
+from app.config import booking_access_token
+from app.users.permissions import UserRole
 
 
 class UserData(BaseModel):
