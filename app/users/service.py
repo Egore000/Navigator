@@ -1,6 +1,6 @@
-from app.core.base import BaseService
+from app.core.base import BaseDAO
 from app.users.models import User
 
 
-class UsersService(BaseService):
+class UsersDAO(BaseDAO):
     model = User

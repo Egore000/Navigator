@@ -9,7 +9,7 @@ from app.users.auth.dependencies import get_current_user_for_refresh
 from app.users.auth.auth import authenticate_user, get_password_hash, JWTToken
 from app.users.auth.schemas import UserAuth, TokenInfo
 from app.users.models import User
-from app.users.service import UsersService
+from app.users.service import UsersDAO
 
 
 router = APIRouter(
@@ -20,13 +20,13 @@ router = APIRouter(
 
 @router.post("/register")
 async def register_user(user_data: Annotated[UserAuth, Depends()]):
-    existing_user: User = await UsersService.get_one_or_none(email=user_data.email)
+    existing_user: User = await UsersDAO.get_one_or_none(email=user_data.email)
 
     if existing_user:
         raise exceptions.UserAlreadyExistsException
 
     hashed_password = get_password_hash(user_data.password)
-    await UsersService.add(
+    await UsersDAO.add(
         email=user_data.email,
         hashed_password=hashed_password
     )

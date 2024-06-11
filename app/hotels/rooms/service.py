@@ -3,103 +3,126 @@ from sqlalchemy import and_, func, or_, select
 
 from app.database import async_session_maker
 
-from app.core.base import BaseService
+from app.core.base import BaseDAO
 from app.bookings.models import Bookings
 from app.hotels.rooms.models import Rooms
 
 
-class RoomsService(BaseService):
+class RoomsDAO(BaseDAO):
     model = Rooms
 
     @classmethod
     async def get_all(cls, hotel_id: int, **filter_by):
+        """Получение всех комнат отеля из БД"""
         return await super().get_all(hotel_id=hotel_id, **filter_by)
 
     @classmethod
     async def get_room_price(cls, room_id: int):
-        return select(
-                Rooms.price
-            ).filter_by(
-                id=room_id
-            )
-    
+        """Получение цены для конкретной комнаты"""
+        return select(Rooms.price)\
+            .filter_by(id=room_id)
+
     @classmethod
-    async def get_rooms_left(
+    async def search_for_rooms(
+        cls,
+        hotel_id: int,
+        date_from: date,
+        date_to: date
+    ):
+        """Поиск свободных комнат для определенного отеля на нужный срок"""
+        available_rooms = await cls.get_available_rooms(date_from, date_to)
+
+        available_rooms = available_rooms.where(
+            Rooms.hotel_id == hotel_id
+        )
+
+        async with async_session_maker() as session:
+            rooms = await session.execute(available_rooms)
+            return rooms.mappings().all()
+
+    @classmethod
+    async def get_rooms_left_count(
         cls,
         room_id: int,
         date_from: date,
         date_to: date,
-    ):
+    ) -> int:
+        """Получение количества свободных комнат"""
+        available_rooms = await cls.get_available_rooms(
+            date_from=date_from,
+            date_to=date_to
+        )
+        rooms_left_count = available_rooms.where(available_rooms.c.id == room_id)
+
         async with async_session_maker() as session:
-            rooms_left_query = await cls._get_rooms_left( 
-                room_id=room_id,
-                date_from=date_from,
-                date_to=date_to
-            )
-            rooms_left = await session.execute(rooms_left_query)
+            rooms_left = await session.execute(rooms_left_count)
             rooms_left = rooms_left.scalar()
             return rooms_left
 
     @classmethod
-    async def _get_booked_rooms(
+    async def get_booked_rooms(
         cls,
-        room_id: int,
         date_from: date,
         date_to: date,
     ):
         """
+        Получение забронированных комнат
+
         WITH booked_rooms AS (
-            SELECT * FROM bookings
-            WHERE room_id = <room_id> AND
-            (date_from >= <date_from> AND date_from <= <date_to>) OR
-            (date_from <= <date_from> AND date_to > <date_from>)
+            SELECT room_id, COUNT(room_id) AS count_booked_rooms
+            FROM bookings
+            WHERE (date_from >= <date_from> AND date_from <= <date_to>) OR
+                (date_from <= <date_from> AND date_to > <date_from>)
+            GROUP BY room_id
         )
         """
         return select(
+            Bookings.room_id,
+            func.count(Bookings.room_id).label("count_booked_rooms")
+        ).select_from(
             Bookings
         ).where(
-            and_(
-                Bookings.room_id == room_id,
-                or_(
-                    and_(
-                        Bookings.date_from >= date_from,
-                        Bookings.date_from <= date_to
-                    ),
-                    and_(
-                        Bookings.date_from <= date_from,
-                        Bookings.date_to > date_from
-                    )
+            or_(
+                and_(
+                    Bookings.date_from >= date_from,
+                    Bookings.date_from <= date_to
+                ),
+                and_(
+                    Bookings.date_from <= date_from,
+                    Bookings.date_to > date_from
                 )
             )
+        ).group_by(
+            Bookings.room_id
         ).cte("booked_rooms")
         
     @classmethod
-    async def _get_rooms_left(
+    async def get_available_rooms(
         cls,
-        room_id: int,
         date_from: date,
         date_to: date
-    ) -> int:
+    ):
         """
-        SELECT rooms.quantity - COUNT(booked_rooms.room_id) FROM rooms
-        LEFT JOIN booked_rooms 
-        ON booked_rooms.room_id = rooms.id
-        WHERE rooms.id = 1
-        GROUP BY rooms.quantity, booked_rooms.room_id
+        Получение комнат с количеством свободных номеров
+
+        SELECT rooms.*,
+            rooms.quantity - COALESCE(booked_rooms.count_booked_rooms, 0) AS rooms_left
+        FROM rooms
+        LEFT JOIN booked_rooms
         """
-        booked_rooms = await cls._get_booked_rooms(
-                room_id=room_id,
+        booked_rooms = await cls.get_booked_rooms(
                 date_from=date_from,
                 date_to=date_to
             )
         return select(
-                (Rooms.quantity - func.count(booked_rooms.c.room_id)).label('rooms_left')
-            ).select_from(
-                Rooms
-            ).join(
-                booked_rooms, booked_rooms.c.room_id == Rooms.id, isouter=True
-            ).where(
-                Rooms.id == room_id
-            ).group_by(
-                Rooms.quantity, booked_rooms.c.room_id
-            )
+            Rooms.__table__.columns,
+            (Rooms.quantity - func.coalesce(booked_rooms.c.count_booked_rooms, 0))\
+                .label('rooms_left'),
+            (Rooms.price * (date_to - date_from).days).label('total_cost')
+        ).select_from(
+            Rooms
+        ).join(
+            booked_rooms,
+            booked_rooms.c.room_id == Rooms.id,
+            isouter=True
+        )

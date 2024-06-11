@@ -60,3 +60,8 @@ class IncorrectTokenTypeError(Exception):
 class IncorrectTokenError(BookingException):
     status_code = status.HTTP_401_UNAUTHORIZED
     detail = "Неверный тип токена"
+
+
+class InvalidDateError(BookingException):
+    status_code = status.HTTP_400_BAD_REQUEST
+    detail = "Введена неверная дата"

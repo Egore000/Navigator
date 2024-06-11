@@ -16,3 +16,4 @@ class HotelInfo(HotelScheme):
     services: list[str | None]
     rooms_quantity: int
     image_id: int
+    rooms_left: int | None = None

@@ -10,7 +10,7 @@ from app import exceptions
 from app.config import settings
 
 from app.users.models import User
-from app.users.service import UsersService
+from app.users.service import UsersDAO
 
 
 def get_password_hash(password: str) -> str:
@@ -26,7 +26,7 @@ def verify_password(password: str, hashed_password: str) -> bool:
 
 
 async def authenticate_user(email: EmailStr, password: str) -> User | None:
-    user = await UsersService.get_one_or_none(email=email)
+    user = await UsersDAO.get_one_or_none(email=email)
     if user and verify_password(password, user.hashed_password):
         return user
 

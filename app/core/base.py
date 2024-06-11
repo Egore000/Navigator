@@ -4,7 +4,7 @@ from app.exceptions import NotFoundError
 from app.database import async_session_maker
 
 
-class BaseService:
+class BaseDAO:
     model = None
 
     @classmethod

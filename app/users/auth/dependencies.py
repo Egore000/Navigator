@@ -6,7 +6,7 @@ from app import exceptions
 from app.config import booking_access_token, booking_refresh_token
 
 from app.users.models import User
-from app.users.service import UsersService
+from app.users.service import UsersDAO
 from app.users.auth.auth import JWTToken
 
 
@@ -30,7 +30,7 @@ async def get_user_by_token(payload: dict) -> User:
     if not user_id:
         raise exceptions.UserDoesNotExistsException
 
-    user = await UsersService.get_one_or_none(id=int(user_id))
+    user = await UsersDAO.get_one_or_none(id=int(user_id))
     if not user:
         raise exceptions.UserDoesNotExistsException
     return user

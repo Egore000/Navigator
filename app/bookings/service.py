@@ -2,14 +2,14 @@ from datetime import date
 
 from sqlalchemy import insert
 
-from app.core.base import BaseService
+from app.core.base import BaseDAO
 from app.bookings.models import Bookings
-from app.hotels.rooms.service import RoomsService
+from app.hotels.rooms.service import RoomsDAO
 
 from app.database import async_session_maker
 
 
-class BookingService(BaseService):
+class BookingDAO(BaseDAO):
     model = Bookings
 
     @classmethod
@@ -22,14 +22,14 @@ class BookingService(BaseService):
     ):
         """Бронирование комнаты пользователем на некоторый период времени"""
         async with async_session_maker() as session:
-            rooms_left = await RoomsService.get_rooms_left( 
+            rooms_left = await RoomsDAO.get_rooms_left_count(
                 room_id=room_id,
                 date_from=date_from,
                 date_to=date_to
             )
 
             if rooms_left > 0:
-                get_price = await RoomsService.get_room_price(room_id)
+                get_price = await RoomsDAO.get_room_price(room_id)
                 price = await session.execute(get_price)
                 price = price.scalar()
 
@@ -58,7 +58,7 @@ class BookingService(BaseService):
         return insert(
                 Bookings
             ).values(
-                room_id=room_id, 
+                room_id=room_id,
                 user_id=user_id,
                 date_from=date_from,
                 date_to=date_to,
