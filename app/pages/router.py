@@ -11,6 +11,7 @@ router = APIRouter(
 
 tempaltes = Jinja2Templates(directory="app/templates")
 
+
 @router.get("/hotels")
 async def get_hotels_page(
     request: Request,
