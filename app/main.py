@@ -1,4 +1,5 @@
 from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
 
 import uvicorn
@@ -29,6 +30,24 @@ app.include_router(router_rooms)
 
 app.include_router(router_pages)
 app.include_router(router_images)
+
+origins = [
+    "http://localhost:3000",
+]
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_credentials=True,
+    allow_methods=["GET", "POST", "PUT", "OPTIONS", "PATCH", "DELETE"],
+    allow_headers=[
+        "Content-type",
+        "Set-Cookie",
+        "Access-Control-Allow-Headers",
+        "Allow-Control-Allow-Origin",
+        "Authorization"
+    ],
+)
 
 
 if __name__ == "__main__":

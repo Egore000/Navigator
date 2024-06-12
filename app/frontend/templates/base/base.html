@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    {% block head %}
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="{{ url_for('static', path='css/base.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', path='css/header.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', path='css/navigation.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', path='css/styles.css') }}">
+    <title>{% block title %}{% endblock %}</title>
+    {% endblock %}
+</head>
+<body>
+    <div class="header">Navigator</div>
+    {% include "base/navigation.html" %}
+    <div class="content">{% block content %}{% endblock %}</div>
+    {% include "base/footer.html" %}
+</body>
+</html>

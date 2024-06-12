@@ -1,4 +1,4 @@
-from fastapi import Query, Depends
+from fastapi import Query
 from pydantic import BaseModel
 
 

@@ -1,0 +1,17 @@
+.catalog {
+}
+
+.card {
+    display: flex;
+    padding: 10px;
+    margin-bottom: 15px;
+    margin-left: 10%;
+    color: aliceblue;
+}
+
+.hotel-photo {
+    width: 250px;
+    margin-right: 20px;
+}
+
+
