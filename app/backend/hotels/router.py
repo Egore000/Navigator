@@ -1,6 +1,8 @@
 from datetime import date
 from fastapi import APIRouter, Query
 
+from fastapi_cache.decorator import cache
+
 from app.backend.core.utils import validate_date, return_or_raise_error,\
     today, tomorrow
 from app.backend.hotels.schemas import HotelScheme, HotelInfo
@@ -21,6 +23,7 @@ async def get_all_hotels() -> list[HotelScheme]:
 
 
 @router.get("/{location}")
+@cache(expire=60)
 async def get_hotels_by_location_and_time(
         location: str,
         date_from: date = Query(
@@ -39,6 +42,7 @@ async def get_hotels_by_location_and_time(
 
 
 @router.get("/id/{hotel_id}", response_model_exclude_none=True)
+@cache(expire=60)
 async def get_hotel_by_id(hotel_id: int) -> HotelInfo:
     """Информация о конкретном отеле"""
     hotel = await HotelDAO.get_one_or_none(id=hotel_id)

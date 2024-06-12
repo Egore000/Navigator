@@ -1,13 +1,13 @@
 from datetime import date
 from fastapi import APIRouter, Query, Depends
 
-from app.backend import exceptions
+from fastapi_cache.decorator import cache
+
 from app.backend.core.utils import validate_date, return_or_raise_error,\
     today, tomorrow
 from app.backend.hotels.rooms.schemas import RoomScheme, RoomInfo
 from app.backend.hotels.rooms.service import RoomsDAO
 from app.backend.users.auth.dependencies import get_current_user
-from app.backend.users.permissions import get_current_admin_user
 from app.backend.users.models import User
 
 
@@ -18,6 +18,7 @@ router = APIRouter(
 
 
 @router.get("")
+@cache(expire=60)
 async def get_rooms_by_time(
         hotel_id: int,
         date_from: date = Query(

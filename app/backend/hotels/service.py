@@ -92,17 +92,17 @@ class HotelDAO(BaseDAO):
         )
 
         return select(
-            Hotels.__table__.columns,
+            cls.model.__table__.columns,
             booked_hotels.c.rooms_left,
         ).select_from(
-            Hotels
+            cls.model
         ).join(
             booked_hotels,
-            booked_hotels.c.hotel_id == Hotels.id,
+            booked_hotels.c.hotel_id == cls.model.id,
             isouter=True,
         ).where(
             and_(
                 booked_hotels.c.rooms_left > 0,
-                Hotels.location.like(f"%{location}%")
+                cls.model.location.like(f"%{location}%")
             )
         )

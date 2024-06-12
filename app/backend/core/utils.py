@@ -1,9 +1,24 @@
+from contextlib import asynccontextmanager
 from datetime import date, datetime, timedelta
 from typing import Any
 
-from fastapi import Query
+import fastapi
+
+from fastapi_cache import FastAPICache
+from fastapi_cache.backends.redis import RedisBackend
+
+from redis import asyncio as aioredis
 
 from app.backend import exceptions
+
+
+@asynccontextmanager
+async def lifespan(app: fastapi.FastAPI):
+    redis = aioredis.from_url("redis://localhost:6379",
+                              encoding="utf8",
+                              decode_responses=True)
+    FastAPICache.init(RedisBackend(redis), prefix="cache")
+    yield
 
 
 def validate_date(date_from: date, date_to: date):
