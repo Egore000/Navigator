@@ -1,6 +1,5 @@
 from pydantic import BaseModel, EmailStr
 
-from app.config import booking_access_token
 from app.users.permissions import UserRole
 
 

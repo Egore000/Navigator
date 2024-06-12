@@ -6,7 +6,12 @@ from app.core.utils import validate_date
 from app.hotels.rooms.schemas import RoomScheme, RoomInfo
 from app.hotels.rooms.service import RoomsDAO
 from app.users.auth.dependencies import get_current_user
-from app.users.permissions import UserRole
+from app.users.permissions import (
+    UserRole,
+    get_current_admin_user,
+    get_current_moderator_user
+
+)
 from app.users.models import User
 
 
@@ -35,9 +40,7 @@ async def get_rooms_by_time(
 @router.get("/all")
 async def get_all_rooms(
     hotel_id: int,
-    user: User = Depends(get_current_user)
+    user: User = Depends(get_current_admin_user)
 ) -> list[RoomScheme]:
-    """Вывод всех комнат в отеле"""
-    if user.role == UserRole.admin.value:
-        return await RoomsDAO.get_all(hotel_id)
-    raise exceptions.AccessForbiddenException
+    """Вывод всех комнат в отеле (для админа)"""
+    return await RoomsDAO.get_all(hotel_id)

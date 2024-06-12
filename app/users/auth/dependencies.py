@@ -50,4 +50,5 @@ def get_user(token_type: str, token_field: str):
 
 
 get_current_user = get_user(JWTToken.ACCESS_TOKEN, booking_access_token)
-get_current_user_for_refresh = get_user(JWTToken.REFRESH_TOKEN, booking_refresh_token)
+get_current_user_for_refresh = get_user(JWTToken.REFRESH_TOKEN,
+                                        booking_refresh_token)

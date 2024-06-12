@@ -14,10 +14,14 @@ router = APIRouter(
 
 
 @router.get("/me")
-async def read_me(current_user: User = Depends(get_current_user)) -> UserData:
+async def read_me(
+    current_user: User = Depends(get_current_user)
+) -> UserData:
     return current_user
 
 
 @router.get("/all")
-async def read_all_users(current_user: User = Depends(get_current_admin_user)) -> list[UserData]:
+async def read_all_users(
+    current_user: User = Depends(get_current_admin_user)
+) -> list[UserData]:
     return await UsersDAO.get_all()

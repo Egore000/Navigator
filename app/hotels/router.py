@@ -22,8 +22,10 @@ async def get_all_hotels() -> list[HotelScheme]:
 @router.get("/{location}")
 async def get_hotels_by_location_and_time(
     location: str,
-    date_from: date = Query(..., description=f"Например, {datetime.now().date()}"),
-    date_to: date = Query(..., description=f"Например, {datetime.now().date() + timedelta(days=1)}"),
+    date_from: date = Query(...,
+                            description=f"Например, {datetime.now().date()}"),
+    date_to: date = Query(...,
+                          description=f"Например, {datetime.now().date() + timedelta(days=1)}"),
 ) -> list[HotelInfo]:
     """Поиск отелей по местоположению и времени"""
     validate_date(date_from, date_to)

@@ -71,7 +71,7 @@ class JWTToken:
 
     @classmethod
     def decode(cls, token: str | bytes) -> dict:
-        return jwt.decode(token, cls.PUBLIC_KEY, algorithms=[cls.ALGORITHM,])
+        return jwt.decode(token, cls.PUBLIC_KEY, algorithms=[cls.ALGORITHM, ])
 
     @classmethod
     def validate(cls, token_type: str, payload: dict) -> bool:
