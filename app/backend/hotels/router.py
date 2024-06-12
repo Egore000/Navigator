@@ -1,10 +1,10 @@
 from datetime import date, datetime, timedelta
 from fastapi import APIRouter, Query
 
-from app import exceptions
-from app.core.utils import validate_date
-from app.hotels.schemas import HotelScheme, HotelInfo
-from app.hotels.service import HotelDAO
+from app.backend import exceptions
+from app.backend.core.utils import validate_date
+from app.backend.hotels.schemas import HotelScheme, HotelInfo
+from app.backend.hotels.service import HotelDAO
 
 
 router = APIRouter(

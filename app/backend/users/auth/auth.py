@@ -6,11 +6,11 @@ import bcrypt
 
 from pydantic import EmailStr
 
-from app import exceptions
+from app.backend import exceptions
 from app.config import settings
 
-from app.users.models import User
-from app.users.service import UsersDAO
+from app.backend.users.models import User
+from app.backend.users.service import UsersDAO
 
 
 def get_password_hash(password: str) -> str:

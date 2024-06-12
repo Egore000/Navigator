@@ -2,11 +2,11 @@ from datetime import date
 
 from sqlalchemy import insert
 
-from app.core.base import BaseDAO
-from app.bookings.models import Bookings
-from app.hotels.rooms.service import RoomsDAO
+from app.backend.core.base import BaseDAO
+from app.backend.bookings.models import Bookings
+from app.backend.hotels.rooms.service import RoomsDAO
 
-from app.database import async_session_maker
+from app.backend.database import async_session_maker
 
 
 class BookingDAO(BaseDAO):

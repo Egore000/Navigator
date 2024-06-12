@@ -2,9 +2,9 @@ from enum import Enum
 
 from fastapi import Depends
 
-from app import exceptions
-from app.users.auth.dependencies import get_current_user
-from app.users.models import User
+from app.backend import exceptions
+from app.backend.users.auth.dependencies import get_current_user
+from app.backend.users.models import User
 
 
 class UserRole(str, Enum):

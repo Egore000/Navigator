@@ -1,7 +1,7 @@
 from sqlalchemy import MappingResult, insert, select
 
-from app.exceptions import NotFoundError
-from app.database import async_session_maker
+from app.backend.exceptions import NotFoundError
+from app.backend.database import async_session_maker
 
 
 class BaseDAO:

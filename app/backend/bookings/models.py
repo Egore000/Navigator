@@ -2,7 +2,7 @@ from sqlalchemy import (
     Column, Computed, Date,
     ForeignKey, Integer
 )
-from app.database import Model
+from app.backend.database import Model
 
 
 class Bookings(Model):

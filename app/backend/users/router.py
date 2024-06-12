@@ -1,10 +1,10 @@
 from fastapi import APIRouter, Depends
 
-from app.users.auth.dependencies import get_current_user
-from app.users.permissions import get_current_admin_user
-from app.users.schemas import UserData
-from app.users.models import User
-from app.users.service import UsersDAO
+from app.backend.users.auth.dependencies import get_current_user
+from app.backend.users.permissions import get_current_admin_user
+from app.backend.users.schemas import UserData
+from app.backend.users.models import User
+from app.backend.users.service import UsersDAO
 
 
 router = APIRouter(

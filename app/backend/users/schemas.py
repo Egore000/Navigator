@@ -1,6 +1,6 @@
 from pydantic import BaseModel, EmailStr
 
-from app.users.permissions import UserRole
+from app.backend.users.permissions import UserRole
 
 
 class UserData(BaseModel):

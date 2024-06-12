@@ -3,13 +3,13 @@ from typing import Annotated
 from fastapi import APIRouter, Depends, Response
 
 from app.config import booking_access_token, booking_refresh_token
-from app import exceptions
+from app.backend import exceptions
 
-from app.users.auth.dependencies import get_current_user_for_refresh
-from app.users.auth.auth import authenticate_user, get_password_hash, JWTToken
-from app.users.auth.schemas import UserAuth, TokenInfo
-from app.users.models import User
-from app.users.service import UsersDAO
+from app.backend.users.auth.dependencies import get_current_user_for_refresh
+from app.backend.users.auth.auth import authenticate_user, get_password_hash, JWTToken
+from app.backend.users.auth.schemas import UserAuth, TokenInfo
+from app.backend.users.models import User
+from app.backend.users.service import UsersDAO
 
 
 router = APIRouter(

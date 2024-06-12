@@ -1,13 +1,13 @@
 from datetime import date
 from fastapi import APIRouter, Depends
 
-from app.exceptions import RoomCannotBeBooked
+from app.backend.exceptions import RoomCannotBeBooked
 
-from app.users.auth.dependencies import get_current_user
-from app.users.models import User
+from app.backend.users.auth.dependencies import get_current_user
+from app.backend.users.models import User
 
-from app.bookings.schemas import BookingScheme
-from app.bookings.service import BookingDAO
+from app.backend.bookings.schemas import BookingScheme
+from app.backend.bookings.service import BookingDAO
 
 router = APIRouter(
     prefix="/bookings",

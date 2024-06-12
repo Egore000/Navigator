@@ -1,18 +1,15 @@
 from datetime import date, datetime, timedelta
 from fastapi import APIRouter, Query, Depends
 
-from app import exceptions
-from app.core.utils import validate_date
-from app.hotels.rooms.schemas import RoomScheme, RoomInfo
-from app.hotels.rooms.service import RoomsDAO
-from app.users.auth.dependencies import get_current_user
-from app.users.permissions import (
-    UserRole,
-    get_current_admin_user,
-    get_current_moderator_user
+from app.backend import exceptions
+from app.backend.core.utils import validate_date
+from app.backend.hotels.rooms.schemas import RoomScheme, RoomInfo
+from app.backend.hotels.rooms.service import RoomsDAO
+from app.backend.users.permissions import (
+    get_current_admin_user
 
 )
-from app.users.models import User
+from app.backend.users.models import User
 
 
 router = APIRouter(

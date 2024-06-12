@@ -3,19 +3,23 @@ from fastapi.staticfiles import StaticFiles
 
 import uvicorn
 
-from app.users.auth.router import router as router_auth
-from app.users.router import router as router_users
-from app.bookings.router import router as router_bookings
-from app.hotels.router import router as router_hotels
-from app.hotels.rooms.router import router as router_rooms
+from app.backend.users.auth.router import router as router_auth
+from app.backend.users.router import router as router_users
+from app.backend.bookings.router import router as router_bookings
+from app.backend.hotels.router import router as router_hotels
+from app.backend.hotels.rooms.router import router as router_rooms
 
-from app.pages.router import router as router_pages
-from app.images.router import router as router_images
+from app.backend.pages.router import router as router_pages
+from app.backend.images.router import router as router_images
+
+from app.config import STATIC
 
 
 app = FastAPI()
 
-app.mount("/static", StaticFiles(directory="app/static"), name="static")
+app.mount("/static",
+          StaticFiles(directory=STATIC),
+          name="static")
 
 app.include_router(router_auth)
 app.include_router(router_users)

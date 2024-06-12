@@ -2,12 +2,12 @@ from datetime import date
 
 from sqlalchemy import func, select, and_
 
-from app.database import async_session_maker
-from app.hotels.rooms.models import Rooms
+from app.backend.database import async_session_maker
+from app.backend.hotels.rooms.models import Rooms
 
-from app.hotels.rooms.service import RoomsDAO
-from app.hotels.models import Hotels
-from app.core.base import BaseDAO
+from app.backend.hotels.rooms.service import RoomsDAO
+from app.backend.hotels.models import Hotels
+from app.backend.core.base import BaseDAO
 
 
 class HotelDAO(BaseDAO):

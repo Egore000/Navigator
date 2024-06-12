@@ -5,6 +5,11 @@ from pydantic import BaseSettings
 
 BASE_DIR = Path(__file__).parent.parent
 
+FRONTEND_BASE_DIR = BASE_DIR / "app" / "frontend"
+STATIC = FRONTEND_BASE_DIR / "static"
+TEMPLATES = FRONTEND_BASE_DIR / "templates"
+IMAGES = STATIC / "images"
+
 
 class AuthJWT(BaseSettings):
     PRIVATE_KEY: Path = BASE_DIR / "certs" / "private.pem"

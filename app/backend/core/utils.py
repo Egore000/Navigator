@@ -1,6 +1,6 @@
 from datetime import date
 
-from app import exceptions
+from app.backend import exceptions
 
 
 def validate_date(date_from: date, date_to: date):
