@@ -1,9 +1,12 @@
 from datetime import date
+
 from fastapi import APIRouter, Depends, Query
+from pydantic import parse_obj_as
 
 from app.backend import exceptions, responses
 from app.backend.core.utils import return_or_raise_error, validate_date, \
     tomorrow, today
+from app.backend.tasks import tasks
 
 from app.backend.users.auth.dependencies import get_current_user
 from app.backend.users.models import User
@@ -39,13 +42,17 @@ async def add_booking(
             description=f"Например, {tomorrow}"
         ),
         user: User = Depends(get_current_user)
-) -> responses.JSONResponse:
+) -> BookingScheme:
     """Бронирование комнаты в отеле на указанный срок"""
     validate_date(date_from, date_to)
+
     booking = await BookingDAO.add(user.id, room_id, date_from, date_to)
     if not booking:
         raise exceptions.RoomCannotBeBooked
-    return responses.CreatedSuccessfullyResponse
+
+    booking_dict = parse_obj_as(BookingScheme, booking).dict()
+    tasks.send_booking_confirmation_email.delay(booking_dict, user.email)
+    return booking
 
 
 @router.delete("/{booking_id}")

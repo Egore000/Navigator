@@ -9,12 +9,13 @@ from fastapi_cache.backends.redis import RedisBackend
 
 from redis import asyncio as aioredis
 
+from app.config import settings
 from app.backend import exceptions
 
 
 @asynccontextmanager
 async def lifespan(app: fastapi.FastAPI):
-    redis = aioredis.from_url("redis://localhost:6379",
+    redis = aioredis.from_url(settings.redis.url,
                               encoding="utf8",
                               decode_responses=True)
     FastAPICache.init(RedisBackend(redis), prefix="cache")
