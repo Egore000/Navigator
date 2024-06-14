@@ -2,9 +2,15 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
 
+from sqladmin import Admin
+
 import uvicorn
 
 from app.backend.core.utils import lifespan
+from app.backend.database import engine
+
+from app.backend.admin.views import UserAdmin, BookingsAdmin, HotelsAdmin, RoomsAdmin
+from app.backend.admin.auth import authentication_backend
 
 from app.backend.users.auth.router import router as router_auth
 from app.backend.users.router import router as router_users
@@ -50,6 +56,14 @@ app.add_middleware(
         "Authorization"
     ],
 )
+
+
+admin = Admin(app, engine, authentication_backend=authentication_backend)
+admin.add_view(UserAdmin)
+admin.add_view(BookingsAdmin)
+admin.add_view(HotelsAdmin)
+admin.add_view(RoomsAdmin)
+
 
 if __name__ == "__main__":
     uvicorn.run("main:app", host="127.0.0.1", port=8000, reload=True)
