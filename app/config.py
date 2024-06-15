@@ -1,4 +1,5 @@
 from pathlib import Path
+from typing import Literal
 
 from pydantic import BaseSettings
 
@@ -11,12 +12,16 @@ TEMPLATES = FRONTEND_BASE_DIR / "templates"
 IMAGES = STATIC / "images"
 
 
-class ProjectSettings(BaseSettings):
+class Config(BaseSettings):
     class Config:
         env_file = '.env'
 
 
-class AuthJWT(ProjectSettings):
+class ProjectSettings(Config):
+    MODE: Literal["DEV", "TEST", "PROD"]
+
+
+class AuthJWT(Config):
     PRIVATE_KEY: Path = BASE_DIR / "certs" / "private.pem"
     PUBLIC_KEY: Path = BASE_DIR / "certs" / "public.pem"
     ALGORITHM: str
@@ -24,7 +29,7 @@ class AuthJWT(ProjectSettings):
     REFRESH_TOKEN_EXPIRE_DAYS: int = 1
 
 
-class DBSettings(ProjectSettings):
+class DBSettings(Config):
     DB_HOST: str
     DB_PORT: int
     DB_PASS: int
@@ -38,14 +43,28 @@ class DBSettings(ProjectSettings):
                f"{self.DB_HOST}:{self.DB_PORT}/{self.DB_NAME}"
 
 
-class SMTPSettings(ProjectSettings):
+class TestDBSettings(Config):
+    TEST_DB_HOST: str
+    TEST_DB_PORT: int
+    TEST_DB_PASS: int
+    TEST_DB_NAME: str
+    TEST_DB_USER: str
+
+    @property
+    def TEST_DATABASE_URL(self):
+        return f"postgresql+asyncpg://" \
+               f"{self.TEST_DB_USER}:{self.TEST_DB_PASS}@" \
+               f"{self.TEST_DB_HOST}:{self.TEST_DB_PORT}/{self.TEST_DB_NAME}"
+
+
+class SMTPSettings(Config):
     SMTP_HOST: str
     SMTP_PORT: int
     SMTP_USER: str
     SMTP_PASS: str
 
 
-class RedisSettings(ProjectSettings):
+class RedisSettings(Config):
     REDIS_HOST: str
     REDIS_PORT: int
 
@@ -54,8 +73,10 @@ class RedisSettings(ProjectSettings):
         return f"redis://{self.REDIS_HOST}:{self.REDIS_PORT}"
 
 
-class Settings(ProjectSettings):
+class Settings(Config):
+    project = ProjectSettings()
     db = DBSettings()
+    test_db = TestDBSettings()
     auth_jwt = AuthJWT()
     smtp = SMTPSettings()
     redis = RedisSettings()
