@@ -3,9 +3,11 @@ from datetime import date, datetime, timedelta
 from typing import Any
 
 import fastapi
+from fastapi import Query
 
 from fastapi_cache import FastAPICache
 from fastapi_cache.backends.redis import RedisBackend
+from pydantic import BaseModel
 
 from redis import asyncio as aioredis
 
@@ -35,3 +37,14 @@ def return_or_raise_error(some: Any) -> Any:
 
 today = datetime.now().date()
 tomorrow = today + timedelta(days=1)
+
+
+class Dates(BaseModel):
+    date_from: date = Query(
+        ...,
+        description=f"Например, {today}"
+    )
+    date_to: date = Query(
+        ...,
+        description=f"Например, {tomorrow}"
+    )

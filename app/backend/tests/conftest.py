@@ -71,21 +71,21 @@ async def ac() -> AsyncClient:
         yield ac
 
 
-@pytest.fixture(scope="function")
-async def session() -> AsyncSession:
-    async with async_session_maker() as session:
-        yield session
-
-
 @pytest.fixture(scope="session")
-async def authenticates_ac() -> AsyncClient:
+async def authenticated_ac() -> AsyncClient:
     async with AsyncClient(
             app=fastapi_app,
             base_url="http://test",
     ) as ac:
-        await ac.post("/auth/register", params={
+        await ac.post("/auth/login", params={
             "email": "test@test.com",
             "password": "test",
         })
-        assert ac.cookies.get(config.booking_access_token)
+        assert ac.cookies[config.booking_access_token]
         yield ac
+
+
+@pytest.fixture(scope="function")
+async def session() -> AsyncSession:
+    async with async_session_maker() as session:
+        yield session

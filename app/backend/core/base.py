@@ -1,4 +1,4 @@
-from sqlalchemy import MappingResult, insert, select
+from sqlalchemy import MappingResult, insert, select, update
 
 from app.backend.exceptions import NotFoundError
 from app.backend.database import async_session_maker
@@ -29,6 +29,22 @@ class BaseDAO:
                 raise NotFoundError
             await session.delete(data)
             await session.commit()
+
+    @classmethod
+    async def update(cls, item_id: int, **values):
+        query = update(
+            cls.model
+        ).where(
+            cls.model.id == item_id
+        ).values(
+            **values
+        ).returning(
+            cls.model
+        )
+        async with async_session_maker() as session:
+            updated = await session.execute(query)
+            await session.commit()
+            return updated
 
     @classmethod
     async def __get_query_result(cls, **filter_by) -> MappingResult:

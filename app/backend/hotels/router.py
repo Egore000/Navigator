@@ -1,10 +1,10 @@
-from datetime import date
-from fastapi import APIRouter, Query
+from typing import Annotated
+
+from fastapi import APIRouter, Depends
 
 from fastapi_cache.decorator import cache
 
-from app.backend.core.utils import validate_date, return_or_raise_error,\
-    today, tomorrow
+from app.backend.core.utils import validate_date, return_or_raise_error, Dates
 from app.backend.hotels.schemas import HotelScheme, HotelInfo
 from app.backend.hotels.service import HotelDAO
 
@@ -26,18 +26,11 @@ async def get_all_hotels() -> list[HotelScheme]:
 @cache(expire=60)
 async def get_hotels_by_location_and_time(
         location: str,
-        date_from: date = Query(
-            ...,
-            description=f"Например, {today}"
-        ),
-        date_to: date = Query(
-            ...,
-            description=f"Например, {tomorrow}"
-        ),
+        dates: Annotated[Dates, Depends()]
 ) -> list[HotelInfo]:
     """Поиск отелей по местоположению и времени"""
-    validate_date(date_from, date_to)
-    hotels = await HotelDAO.search_for_hotels(location, date_from, date_to)
+    validate_date(dates.date_from, dates.date_to)
+    hotels = await HotelDAO.search_for_hotels(location, dates.date_from, dates.date_to)
     return return_or_raise_error(hotels)
 
 

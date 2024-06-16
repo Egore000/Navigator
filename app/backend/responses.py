@@ -3,16 +3,16 @@ from fastapi import status
 
 
 SuccessResponse = JSONResponse(
-    content="success",
+    content={"detail": "success"},
     status_code=status.HTTP_200_OK
 )
 
 CreatedSuccessfullyResponse = JSONResponse(
-    content="created successfully",
+    content={"detail": "created successfully"},
     status_code=status.HTTP_201_CREATED
 )
 
 DeletedSuccessfullyResponse = JSONResponse(
-    content="deleted successfully",
+    content={"detail": "deleted successfully"},
     status_code=status.HTTP_200_OK
 )
