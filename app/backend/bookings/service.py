@@ -1,9 +1,10 @@
 from datetime import date
 
-from sqlalchemy import insert, select, func, and_, update
+from sqlalchemy import insert, select, func, and_
 
 from app.backend.core.base import BaseDAO
 from app.backend.bookings.models import Bookings
+from app.backend.core.utils import validate_date
 from app.backend.hotels.rooms.service import RoomsDAO
 
 from app.backend.database import async_session_maker
@@ -13,7 +14,7 @@ class BookingDAO(BaseDAO):
     model = Bookings
 
     @classmethod
-    async def add(
+    async def insert(
         cls,
         user_id: int,
         room_id: int,
@@ -46,19 +47,16 @@ class BookingDAO(BaseDAO):
 
     @classmethod
     async def update(cls, item_id: int, **values):
-        data = values.copy()
+        if "room_id" in values:
+            room_id = values.get("room_id")
+            if room_id is None:
+                values.pop("room_id")
+            else:
+                price = await RoomsDAO.get_room_price(room_id)
+                values.update({"price": price})
 
-        room_id = data.pop("room_id")
-        if room_id is not None:
-            price = await RoomsDAO.get_room_price(room_id)
-
-            data.update({
-                "price": price,
-                "room_id": room_id,
-            })
-
-        booking = await super().update(item_id, **data)
-        return booking.scalar()
+        booking = await super().update(item_id, **values)
+        return booking
 
     @classmethod
     async def _add_booking(

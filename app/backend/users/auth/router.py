@@ -29,7 +29,7 @@ async def register_user(
         raise exceptions.UserAlreadyExistsException
 
     hashed_password = get_password_hash(user_data.password)
-    await UsersDAO.add(
+    await UsersDAO.insert(
         email=user_data.email,
         hashed_password=hashed_password
     )

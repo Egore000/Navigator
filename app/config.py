@@ -25,8 +25,8 @@ class AuthJWT(Config):
     PRIVATE_KEY: Path = BASE_DIR / "certs" / "private.pem"
     PUBLIC_KEY: Path = BASE_DIR / "certs" / "public.pem"
     ALGORITHM: str
-    ACCESS_TOKEN_EXPIRE_MINUTES: int = 15
-    REFRESH_TOKEN_EXPIRE_DAYS: int = 1
+    ACCESS_TOKEN_EXPIRE_MINUTES: int = 60
+    REFRESH_TOKEN_EXPIRE_DAYS: int = 7
 
 
 class DBSettings(Config):
