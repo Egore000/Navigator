@@ -8,7 +8,9 @@ from app.backend.users.models import User
 
 class UserAdmin(ModelView, model=User):
     column_list = [User.id, User.email, User.role]
-    column_details_exclude_list = [User.hashed_password, ]
+    column_details_exclude_list = [
+        User.hashed_password,
+    ]
     can_delete = False
     name = "Пользователь"
     name_plural = "Пользователи"
@@ -34,5 +36,3 @@ class BookingsAdmin(ModelView, model=Bookings):
     name = "Бронь"
     name_plural = "Брони"
     icon = "fa-solid fa-book"
-
-

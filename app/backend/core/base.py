@@ -1,4 +1,4 @@
-from sqlalchemy import MappingResult, insert, select, update
+from sqlalchemy import MappingResult, insert, select, update, ScalarResult
 
 from app.backend.exceptions import NotFoundError
 from app.backend.database import async_session_maker
@@ -27,44 +27,46 @@ class BaseDAO:
             await session.commit()
 
     @classmethod
-    async def update(cls, item_id: int, **values):
-        query = update(
-            cls.model
-        ).where(
-            cls.model.id == item_id
-        ).values(
-            **values
-        ).returning(
-            cls.model
+    async def update(cls, item_id: int, **values) -> ScalarResult:
+        query = (
+            update(cls.model)
+            .where(cls.model.id == item_id)
+            .values(**values)
+            .returning(cls.model)
         )
-        async with async_session_maker() as session:
-            updated = await session.execute(query)
-            await session.commit()
-            return updated.scalar()
+        result = await cls.commit(query)
+        return result.scalar()
 
     @classmethod
     async def insert(cls, **data):
-        async with async_session_maker() as session:
-            query = insert(
-                cls.model
-            ).values(
-                **data
-            ).returning(
-                cls.model
-            )
-            instance = await session.execute(query)
-            await session.commit()
-            return instance
+        query = (
+            insert(cls.model)
+            .values(**data)
+            .returning(cls.model)
+        )
+        result = await cls.commit(query)
+        return result
 
     @classmethod
     async def filter(cls, **filter_by) -> MappingResult:
+        query = (
+            select(cls.model.__table__.columns)
+            .filter_by(**filter_by)
+        )
+        result = await cls.execute(query)
+        return result.mappings()
+
+    @classmethod
+    async def execute(cls, query):
         async with async_session_maker() as session:
-            query = select(
-                cls.model.__table__.columns
-            ).filter_by(
-                **filter_by
-            )
             result = await session.execute(query)
-            return result.mappings()
+            return result
+
+    @classmethod
+    async def commit(cls, query):
+        async with async_session_maker() as session:
+            result = await session.execute(query)
+            await session.commit()
+            return result
 
 
