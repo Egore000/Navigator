@@ -2,6 +2,8 @@ import uvicorn
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
+
+# from fastapi_versioning import VersionedFastAPI
 from sqladmin import Admin
 
 from app.backend.admin.auth import authentication_backend
@@ -13,18 +15,15 @@ from app.backend.hotels.rooms.router import router as router_rooms
 from app.backend.hotels.router import router as router_hotels
 from app.backend.images.router import router as router_images
 from app.backend.pages.router import router as router_pages
+from app.backend.sentry import init_sentry
 from app.backend.users.auth.router import router as router_auth
 from app.backend.users.router import router as router_users
 from app.config import STATIC
 from app.middlewares import LoggingMiddleware
 
-# init_sentry()
+init_sentry()
 
 app = FastAPI(lifespan=lifespan)
-
-app.mount("/static",
-          StaticFiles(directory=STATIC),
-          name="static")
 
 app.include_router(router_auth)
 app.include_router(router_users)
@@ -54,11 +53,20 @@ app.add_middleware(
 )
 app.add_middleware(LoggingMiddleware)
 
+# app = VersionedFastAPI(app,
+#     version_format="{major}",
+#     prefix_format="/v{major}"
+# )
+
 admin = Admin(app, engine, authentication_backend=authentication_backend)
 admin.add_view(UserAdmin)
 admin.add_view(BookingsAdmin)
 admin.add_view(HotelsAdmin)
 admin.add_view(RoomsAdmin)
+
+app.mount("/static",
+          StaticFiles(directory=STATIC),
+          name="static")
 
 
 if __name__ == "__main__":

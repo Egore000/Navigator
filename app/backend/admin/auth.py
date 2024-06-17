@@ -25,9 +25,12 @@ class AdminAuth(AuthenticationBackend):
             access_token = JWTToken.create(JWTToken.ACCESS_TOKEN, {"sub": str(user.id)})
             request.session.update({"token": access_token})
 
-            logger.info("Admin user login", extra={
-                "user": email,
-            })
+            logger.info(
+                "Admin user login",
+                extra={
+                    "user": email,
+                },
+            )
             return True
         return False
 

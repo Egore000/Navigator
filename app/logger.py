@@ -1,5 +1,5 @@
 import logging
-from datetime import datetime, UTC
+from datetime import UTC, datetime
 
 import yaml
 from pythonjsonlogger import jsonlogger
@@ -37,3 +37,6 @@ jsonLogger.addHandler(streamHandler)
 
 jsonLogger.setLevel(settings.logging.LOG_LEVEL)
 
+if settings.project.MODE == "TEST":
+    logger.setLevel("ERROR")
+    jsonLogger.setLevel("ERROR")

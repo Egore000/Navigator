@@ -21,12 +21,14 @@ async def test_add_and_get_booking():
     assert new_booking
 
 
-@pytest.mark.parametrize("user_id, room_id, date_from, date_to, price, total_cost, total_days", [
-    (1, 1, "2024-06-11", "2024-06-14", 24500, 73500, 3),
-    (2, 4, None, "2024-06-15", 4350, 21750, 5),
-    (2, 4, "2024-06-12", None, 4350, 52200, 12),
-    (2, 4, "2024-01-02", "2024-01-01", 4350, -4350, -1),
-])
+@pytest.mark.parametrize("user_id, room_id, date_from, date_to, price, total_cost, total_days",
+    [
+        (1, 1, "2024-06-11", "2024-06-14", 24500, 73500, 3),
+        (2, 4, None, "2024-06-15", 4350, 21750, 5),
+        (2, 4, "2024-06-12", None, 4350, 52200, 12),
+        (2, 4, "2024-01-02", "2024-01-01", 4350, -4350, -1),
+    ]
+)
 async def test_add_and_update_booking(
         user_id,
         room_id,

@@ -16,9 +16,7 @@ from app.logger import logger
 
 @asynccontextmanager
 async def lifespan(app: fastapi.FastAPI):
-    redis = aioredis.from_url(settings.redis.url,
-                              encoding="utf8",
-                              decode_responses=True)
+    redis = aioredis.from_url(settings.redis.url, encoding="utf8", decode_responses=True)
     FastAPICache.init(RedisBackend(redis), prefix="cache")
     logger.info("Redis connected")
     yield

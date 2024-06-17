@@ -2,6 +2,7 @@ from datetime import date
 from typing import Annotated
 
 from fastapi import APIRouter, Depends, Query
+from fastapi_versioning import version
 from pydantic import parse_obj_as
 
 from app.backend import exceptions, responses
@@ -19,6 +20,7 @@ router = APIRouter(
 
 
 @router.get("")
+@version(1)
 async def get_bookings(
     user: User = Depends(get_current_user)
 ) -> list[BookingInfo]:
@@ -28,6 +30,7 @@ async def get_bookings(
 
 
 @router.post("", response_model=BookingInfo)
+@version(1)
 async def add_booking(
         room_id: int,
         dates: Annotated[Dates, Depends()],
@@ -46,6 +49,7 @@ async def add_booking(
 
 
 @router.get("/{booking_id}")
+@version(1)
 async def get_booking(
         booking_id: int,
         user: User = Depends(get_current_user)
@@ -56,6 +60,7 @@ async def get_booking(
 
 
 @router.delete("/{booking_id}")
+@version(1)
 async def delete_booking(
         booking_id: int,
         user: User = Depends(get_current_user)
@@ -70,6 +75,7 @@ async def delete_booking(
 
 
 @router.patch("/{booking_id}")
+@version(1)
 async def update_booking(
         booking_id: int,
         room_id: int | None = None,
