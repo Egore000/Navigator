@@ -24,7 +24,7 @@ class HotelsQueries:
                 SUM(rooms.quantity - COALESCE(booked_rooms.count_booked_rooms, 0))
                 AS rooms_available
             FROM rooms
-            LEFT JOIN booked_rooms
+            LEFT OUTER JOIN booked_rooms
             ON rooms.id = booked_rooms.room_id
             GROUP BY rooms.hotel_id
         )
@@ -60,7 +60,7 @@ class HotelsQueries:
         """```
         SELECT hotels.*, booked_hotels.rooms_left
         FROM hotels
-        LEFT JOIN booked_hotels
+        LEFT OUTER JOIN booked_hotels
         ON hotels.id = booked_hotels.hotel_id,
         WHERE booked_hotels.rooms_left > 0
         """
@@ -93,7 +93,7 @@ class HotelsQueries:
         """```
         SELECT hotels.*, booked_hotels.rooms_left
         FROM hotels
-        LEFT JOIN booked_hotels
+        LEFT OUTER JOIN booked_hotels
         ON hotels.id = booked_hotels.hotel_id,
         WHERE (booked_hotels.rooms_left > 0) AND
             (hotels.location LIKE '%LOCATION%')

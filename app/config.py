@@ -1,3 +1,4 @@
+import os
 from pathlib import Path
 from typing import Literal
 
@@ -10,6 +11,8 @@ STATIC = FRONTEND_BASE_DIR / "static"
 TEMPLATES = FRONTEND_BASE_DIR / "templates"
 IMAGES = STATIC / "images"
 
+LOG_DIR = BASE_DIR / "logs"
+
 
 class Config(BaseSettings):
     class Config:
@@ -18,6 +21,12 @@ class Config(BaseSettings):
 
 class ProjectSettings(Config):
     MODE: Literal["DEV", "TEST", "PROD"]
+
+
+class LoggingSettings(Config):
+    LOG_LEVEL: Literal["DEBUG", "INFO", "WARNING", "ERROR", "CRITICAL"]
+    SENTRY_URL: str
+    DIR = LOG_DIR
 
 
 class AuthJWT(Config):
@@ -79,9 +88,12 @@ class Settings(Config):
     auth_jwt = AuthJWT()
     smtp = SMTPSettings()
     redis = RedisSettings()
+    logging = LoggingSettings()
 
 
 settings = Settings()
+
+os.chmod(settings.logging.DIR, 0o777)
 
 booking_access_token = "Bearer"
 booking_refresh_token = "Refresh"

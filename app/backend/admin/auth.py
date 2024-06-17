@@ -9,6 +9,7 @@ from app.backend.users.auth.auth import JWTToken, authenticate_user
 from app.backend.users.auth.dependencies import get_current_user
 from app.backend.users.permissions import UserRole
 from app.config import settings
+from app.logger import logger
 
 
 class AdminAuth(AuthenticationBackend):
@@ -18,10 +19,17 @@ class AdminAuth(AuthenticationBackend):
 
         user = await authenticate_user(EmailStr(email), password)
         if user:
+            if user.role not in (UserRole.admin, UserRole.moderator):
+                raise exceptions.AccessForbiddenException
+
             access_token = JWTToken.create(JWTToken.ACCESS_TOKEN, {"sub": str(user.id)})
             request.session.update({"token": access_token})
 
-        return True
+            logger.info("Admin user login", extra={
+                "user": email,
+            })
+            return True
+        return False
 
     async def logout(self, request: Request) -> bool:
         request.session.clear()

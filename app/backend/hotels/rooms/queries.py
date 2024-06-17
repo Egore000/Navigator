@@ -81,7 +81,7 @@ class RoomsQueries:
             rooms.quantity - COALESCE(booked_rooms.count_booked_rooms, 0) AS rooms_left,
             rooms.price * (DATE('2023-06-20') - DATE('2023-05-15')) AS total_cost
         FROM rooms
-        LEFT JOIN booked_rooms
+        LEFT OUTER JOIN booked_rooms
         ON rooms.id = booked_rooms.room_id
         """
 
@@ -112,7 +112,7 @@ class RoomsQueries:
         """```
             SELECT quantity - COALESCE(booked_rooms.count_booked_rooms, 0)
             FROM rooms
-            LEFT JOIN booked_rooms
+            LEFT OUTER JOIN booked_rooms
             ON id = booked_rooms.room_id
             WHERE id = room_id
         """
@@ -152,7 +152,8 @@ class RoomsQueries:
                 rooms.quantity - COALESCE(booked_rooms.count_booked_rooms, 0) AS rooms_left,
                 rooms.price * (DATE('2023-06-20') - DATE('2023-05-15')) AS total_cost
             FROM rooms
-            LEFT JOIN booked_rooms ON booked_rooms.room_id = rooms.id
+            LEFT OUTER JOIN booked_rooms 
+            ON booked_rooms.room_id = rooms.id
         )
         SELECT *
         FROM available_rooms

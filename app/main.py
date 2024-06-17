@@ -16,6 +16,9 @@ from app.backend.pages.router import router as router_pages
 from app.backend.users.auth.router import router as router_auth
 from app.backend.users.router import router as router_users
 from app.config import STATIC
+from app.middlewares import LoggingMiddleware
+
+# init_sentry()
 
 app = FastAPI(lifespan=lifespan)
 
@@ -49,7 +52,7 @@ app.add_middleware(
         "Authorization"
     ],
 )
-
+app.add_middleware(LoggingMiddleware)
 
 admin = Admin(app, engine, authentication_backend=authentication_backend)
 admin.add_view(UserAdmin)

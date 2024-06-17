@@ -11,6 +11,7 @@ from redis import asyncio as aioredis
 
 from app.backend import exceptions
 from app.config import settings
+from app.logger import logger
 
 
 @asynccontextmanager
@@ -19,6 +20,7 @@ async def lifespan(app: fastapi.FastAPI):
                               encoding="utf8",
                               decode_responses=True)
     FastAPICache.init(RedisBackend(redis), prefix="cache")
+    logger.info("Redis connected")
     yield
 
 

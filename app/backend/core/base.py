@@ -2,8 +2,9 @@ from typing import Any
 
 from sqlalchemy import MappingResult, insert, select, update
 
-from app.backend.database import async_session_maker
+from app.backend.database import async_session_maker, engine
 from app.backend.exceptions import NotFoundError
+from app.logger import logger
 
 
 class BaseDAO:
@@ -60,12 +61,14 @@ class BaseDAO:
 
     @classmethod
     async def execute(cls, query):
+        logger.debug(query.compile(engine, compile_kwargs={"literal_binds": True}))
         async with async_session_maker() as session:
             result = await session.execute(query)
             return result
 
     @classmethod
     async def commit(cls, query):
+        logger.debug(query.compile(engine, compile_kwargs={"literal_binds": True}))
         async with async_session_maker() as session:
             result = await session.execute(query)
             await session.commit()
