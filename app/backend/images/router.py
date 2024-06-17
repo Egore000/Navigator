@@ -7,7 +7,6 @@ from app.backend.responses import CreatedSuccessfullyResponse
 from app.backend.tasks.tasks import process_picture
 from app.config import IMAGES
 
-
 router = APIRouter(
     prefix="/images",
     tags=["Загрузка картинок", ],

@@ -1,13 +1,12 @@
-from datetime import datetime, UTC
+from datetime import UTC, datetime
 
 from fastapi import Depends, Request
 
 from app.backend import exceptions
-from app.config import booking_access_token, booking_refresh_token
-
+from app.backend.users.auth.auth import JWTToken
 from app.backend.users.models import User
 from app.backend.users.service import UsersDAO
-from app.backend.users.auth.auth import JWTToken
+from app.config import booking_access_token, booking_refresh_token
 
 
 def get_token(token_field: str):

@@ -1,6 +1,6 @@
 from datetime import date
 
-from sqlalchemy import select, func
+from sqlalchemy import func, select
 
 from app.backend.hotels.models import Hotels
 from app.backend.hotels.rooms.models import Rooms

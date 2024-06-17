@@ -1,6 +1,6 @@
 from datetime import date
 
-from sqlalchemy import select, func, and_, or_
+from sqlalchemy import and_, func, or_, select
 
 from app.backend.bookings.models import Bookings
 from app.backend.hotels.rooms.models import Rooms

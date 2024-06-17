@@ -1,8 +1,8 @@
 from datetime import date
 
-from app.backend.hotels.queries import HotelsQueries
-from app.backend.hotels.models import Hotels
 from app.backend.core.base import BaseDAO
+from app.backend.hotels.models import Hotels
+from app.backend.hotels.queries import HotelsQueries
 
 
 class HotelDAO(BaseDAO):

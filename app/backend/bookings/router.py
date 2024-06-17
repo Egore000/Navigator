@@ -5,15 +5,12 @@ from fastapi import APIRouter, Depends, Query
 from pydantic import parse_obj_as
 
 from app.backend import exceptions, responses
-from app.backend.core.utils import return_or_raise_error, validate_date, Dates, today, tomorrow
-from app.backend.tasks import tasks
-
-from app.backend.users.auth.dependencies import get_current_user
-from app.backend.users.models import User
-
 from app.backend.bookings.schemas import BookingInfo
 from app.backend.bookings.service import BookingDAO
-
+from app.backend.core.utils import Dates, return_or_raise_error, today, tomorrow, validate_date
+from app.backend.tasks import tasks
+from app.backend.users.auth.dependencies import get_current_user
+from app.backend.users.models import User
 
 router = APIRouter(
     prefix="/bookings",
@@ -30,12 +27,12 @@ async def get_bookings(
     return return_or_raise_error(bookings)
 
 
-@router.post("")
+@router.post("", response_model=BookingInfo)
 async def add_booking(
         room_id: int,
         dates: Annotated[Dates, Depends()],
         user: User = Depends(get_current_user)
-) -> BookingInfo:
+):
     """Бронирование комнаты в отеле на указанный срок"""
     validate_date(dates.date_from, dates.date_to)
 

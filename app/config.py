@@ -3,7 +3,6 @@ from typing import Literal
 
 from pydantic import BaseSettings
 
-
 BASE_DIR = Path(__file__).parent.parent
 
 FRONTEND_BASE_DIR = BASE_DIR / "app" / "frontend"

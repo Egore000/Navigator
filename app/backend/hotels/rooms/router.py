@@ -1,15 +1,13 @@
 from typing import Annotated
 
 from fastapi import APIRouter, Depends
-
 from fastapi_cache.decorator import cache
 
-from app.backend.core.utils import validate_date, return_or_raise_error, Dates
-from app.backend.hotels.rooms.schemas import RoomScheme, RoomInfo
+from app.backend.core.utils import Dates, return_or_raise_error, validate_date
+from app.backend.hotels.rooms.schemas import RoomInfo, RoomScheme
 from app.backend.hotels.rooms.service import RoomsDAO
 from app.backend.users.auth.dependencies import get_current_user
 from app.backend.users.models import User
-
 
 router = APIRouter(
     prefix="/hotel/{hotel_id}/rooms",

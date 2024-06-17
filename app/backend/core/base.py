@@ -2,8 +2,8 @@ from typing import Any
 
 from sqlalchemy import MappingResult, insert, select, update
 
-from app.backend.exceptions import NotFoundError
 from app.backend.database import async_session_maker
+from app.backend.exceptions import NotFoundError
 
 
 class BaseDAO:

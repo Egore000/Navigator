@@ -4,15 +4,13 @@ from typing import Any
 
 import fastapi
 from fastapi import Query
-
 from fastapi_cache import FastAPICache
 from fastapi_cache.backends.redis import RedisBackend
 from pydantic import BaseModel
-
 from redis import asyncio as aioredis
 
-from app.config import settings
 from app.backend import exceptions
+from app.config import settings
 
 
 @asynccontextmanager

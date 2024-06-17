@@ -2,9 +2,7 @@ from fastapi import APIRouter, Depends, Request
 from fastapi.templating import Jinja2Templates
 
 from app.backend.hotels.router import get_hotels_by_location_and_time
-
 from app.config import TEMPLATES
-
 
 router = APIRouter(
     prefix="/pages",

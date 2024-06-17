@@ -1,16 +1,14 @@
-from datetime import datetime, timedelta, UTC
+from datetime import UTC, datetime, timedelta
 from typing import Any, Literal
 
-import jwt
 import bcrypt
-
+import jwt
 from pydantic import EmailStr
 
 from app.backend import exceptions
-from app.config import settings
-
 from app.backend.users.models import User
 from app.backend.users.service import UsersDAO
+from app.config import settings
 
 
 def get_password_hash(password: str) -> str:

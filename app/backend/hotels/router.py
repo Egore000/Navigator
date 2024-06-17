@@ -1,13 +1,11 @@
 from typing import Annotated
 
 from fastapi import APIRouter, Depends
-
 from fastapi_cache.decorator import cache
 
-from app.backend.core.utils import validate_date, return_or_raise_error, Dates
-from app.backend.hotels.schemas import HotelScheme, HotelInfo
+from app.backend.core.utils import Dates, return_or_raise_error, validate_date
+from app.backend.hotels.schemas import HotelInfo, HotelScheme
 from app.backend.hotels.service import HotelDAO
-
 
 router = APIRouter(
     prefix='/hotels',

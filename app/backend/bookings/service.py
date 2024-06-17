@@ -1,9 +1,9 @@
 from datetime import date
 
-from sqlalchemy import select, func
+from sqlalchemy import func, select
 
-from app.backend.core.base import BaseDAO
 from app.backend.bookings.models import Bookings
+from app.backend.core.base import BaseDAO
 from app.backend.hotels.rooms.service import RoomsDAO
 
 
@@ -17,6 +17,7 @@ class BookingDAO(BaseDAO):
         room_id: int,
         date_from: date,
         date_to: date,
+        **kwargs,
     ) -> Bookings | None:
         """Бронирование комнаты пользователем на некоторый период времени"""
         rooms_left = await RoomsDAO.get_rooms_left_count(room_id, date_from, date_to)
@@ -29,7 +30,8 @@ class BookingDAO(BaseDAO):
                 user_id=user_id,
                 date_from=date_from,
                 date_to=date_to,
-                price=price
+                price=price,
+                **kwargs,
             )
             return new_booking.scalar()
 

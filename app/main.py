@@ -1,28 +1,21 @@
+import uvicorn
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
-
 from sqladmin import Admin
 
-import uvicorn
-
+from app.backend.admin.auth import authentication_backend
+from app.backend.admin.views import BookingsAdmin, HotelsAdmin, RoomsAdmin, UserAdmin
+from app.backend.bookings.router import router as router_bookings
 from app.backend.core.utils import lifespan
 from app.backend.database import engine
-
-from app.backend.admin.views import UserAdmin, BookingsAdmin, HotelsAdmin, RoomsAdmin
-from app.backend.admin.auth import authentication_backend
-
+from app.backend.hotels.rooms.router import router as router_rooms
+from app.backend.hotels.router import router as router_hotels
+from app.backend.images.router import router as router_images
+from app.backend.pages.router import router as router_pages
 from app.backend.users.auth.router import router as router_auth
 from app.backend.users.router import router as router_users
-from app.backend.bookings.router import router as router_bookings
-from app.backend.hotels.router import router as router_hotels
-from app.backend.hotels.rooms.router import router as router_rooms
-
-from app.backend.pages.router import router as router_pages
-from app.backend.images.router import router as router_images
-
 from app.config import STATIC
-
 
 app = FastAPI(lifespan=lifespan)
 
