@@ -5,8 +5,8 @@ class RoomScheme(BaseModel):
     id: int
     hotel_id: int
     name: str
-    description: str|None
-    services: list[str|None]
+    description: str | None
+    services: list[str | None]
     price: int
     quantity: int
     image_id: int

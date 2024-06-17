@@ -142,13 +142,13 @@ class RoomsQueries:
         """```
         WITH available_rooms AS (
             WITH booked_rooms AS (
-                SELECT room_id, COUNT(room_id) AS count_booked_rooms 
+                SELECT room_id, COUNT(room_id) AS count_booked_rooms
                 FROM bookings
                 WHERE(date_from >= <date_from> AND date_from <= <date_to>) OR
                     (date_from <= <date_from> AND date_to > <date_from>)
                 GROUP BY room_id
             )
-            SELECT rooms.*, 
+            SELECT rooms.*,
                 rooms.quantity - COALESCE(booked_rooms.count_booked_rooms, 0) AS rooms_left,
                 rooms.price * (DATE('2023-06-20') - DATE('2023-05-15')) AS total_cost
             FROM rooms

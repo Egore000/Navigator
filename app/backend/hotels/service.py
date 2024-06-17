@@ -1,12 +1,6 @@
 from datetime import date
 
-from sqlalchemy import func, select, and_
-
-from app.backend.database import async_session_maker
 from app.backend.hotels.queries import HotelsQueries
-from app.backend.hotels.rooms.models import Rooms
-
-from app.backend.hotels.rooms.service import RoomsDAO
 from app.backend.hotels.models import Hotels
 from app.backend.core.base import BaseDAO
 
@@ -40,4 +34,3 @@ class HotelDAO(BaseDAO):
 
         hotels = await cls.execute(query)
         return hotels.mappings().all()
-

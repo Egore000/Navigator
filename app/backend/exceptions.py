@@ -11,7 +11,7 @@ class BookingException(HTTPException):
 
 class UserAlreadyExistsException(BookingException):
     status_code = status.HTTP_409_CONFLICT
-    detail = "Пользователь уже существует"    
+    detail = "Пользователь уже существует"
 
 
 class IncorrectEmailOrPasswordException(BookingException):
@@ -40,7 +40,7 @@ class UserDoesNotExistsException(BookingException):
 
 class AccessForbiddenException(BookingException):
     status_code = status.HTTP_403_FORBIDDEN
-    detail = "Доступ запрещён" 
+    detail = "Доступ запрещён"
 
 
 class RoomCannotBeBooked(BookingException):

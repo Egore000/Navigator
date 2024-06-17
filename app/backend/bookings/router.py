@@ -6,7 +6,6 @@ from pydantic import parse_obj_as
 
 from app.backend import exceptions, responses
 from app.backend.core.utils import return_or_raise_error, validate_date, Dates, today, tomorrow
-from app.backend.hotels.rooms.service import RoomsDAO
 from app.backend.tasks import tasks
 
 from app.backend.users.auth.dependencies import get_current_user

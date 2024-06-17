@@ -1,7 +1,5 @@
 from datetime import date
 
-from app.backend.database import async_session_maker
-
 from app.backend.core.base import BaseDAO
 from app.backend.hotels.rooms.models import Rooms
 from app.backend.hotels.rooms.queries import RoomsQueries
@@ -12,7 +10,7 @@ class RoomsDAO(BaseDAO):
     query = RoomsQueries
 
     @classmethod
-    async def get_all(cls, hotel_id: int, **filter_by):
+    async def get_all(cls, hotel_id: int, **filter_by) -> list[Rooms]:
         """Получение всех комнат отеля из БД"""
         return await super().get_all(hotel_id=hotel_id, **filter_by)
 
@@ -30,7 +28,7 @@ class RoomsDAO(BaseDAO):
             hotel_id: int,
             date_from: date,
             date_to: date
-    ):
+    ) -> list[Rooms]:
         """Поиск свободных комнат для определенного отеля на нужный срок"""
         query = await cls.query.get_available_rooms_in_hotel(hotel_id, date_from, date_to)
 

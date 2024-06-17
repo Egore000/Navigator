@@ -1,4 +1,6 @@
-from sqlalchemy import MappingResult, insert, select, update, ScalarResult
+from typing import Any
+
+from sqlalchemy import MappingResult, insert, select, update
 
 from app.backend.exceptions import NotFoundError
 from app.backend.database import async_session_maker
@@ -27,7 +29,7 @@ class BaseDAO:
             await session.commit()
 
     @classmethod
-    async def update(cls, item_id: int, **values) -> ScalarResult:
+    async def update(cls, item_id: int, **values) -> Any:
         query = (
             update(cls.model)
             .where(cls.model.id == item_id)
@@ -68,5 +70,3 @@ class BaseDAO:
             result = await session.execute(query)
             await session.commit()
             return result
-
-

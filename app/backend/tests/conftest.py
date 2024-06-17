@@ -4,7 +4,6 @@ import json
 
 import pytest
 from sqlalchemy import insert
-from fastapi.testclient import TestClient
 from httpx import AsyncClient
 from sqlalchemy.ext.asyncio import AsyncSession
 

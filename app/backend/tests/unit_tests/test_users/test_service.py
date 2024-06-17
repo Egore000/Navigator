@@ -17,4 +17,3 @@ async def test_get_one_or_none_user(user_id, email, exists):
         assert user.email == email
     else:
         assert not user
-

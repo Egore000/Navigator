@@ -1,6 +1,6 @@
 from datetime import date
 
-from sqlalchemy import select, func, and_
+from sqlalchemy import select, func
 
 from app.backend.hotels.models import Hotels
 from app.backend.hotels.rooms.models import Rooms
@@ -102,4 +102,3 @@ class HotelsQueries:
         hotels_in_location = available_hotels.where(cls.model.location.like(f"%{location}%"))
 
         return hotels_in_location
-

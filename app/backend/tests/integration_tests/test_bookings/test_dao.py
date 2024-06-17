@@ -77,5 +77,3 @@ async def test_add_and_update_booking(
     assert updated_booking.price == price
     assert updated_booking.total_cost == total_cost
     assert updated_booking.total_days == total_days
-
-
