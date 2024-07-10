@@ -26,7 +26,7 @@ class ProjectSettings(Config):
 class LoggingSettings(Config):
     LOG_LEVEL: Literal["DEBUG", "INFO", "WARNING", "ERROR", "CRITICAL"]
     SENTRY_URL: str
-    DIR = LOG_DIR
+    DIR: Path = LOG_DIR
 
 
 class AuthJWT(Config):

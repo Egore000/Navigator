@@ -1,0 +1,26 @@
+{% extends "base/base.html" %}
+{% block title %}Navigator{% endblock %}
+{% block content %}
+    <div class="catalog">
+        {% for hotel in hotels %}
+        <div class="card">
+            <img class="hotel-photo"
+                 src="{{ url_for('static', path='images/' + hotel.image_id|string + '.webp') }}"
+                 alt="{{ hotel.name }}"
+            >
+            <div class="card-content">
+                <h1 id="hotel-name">{{ hotel.name }}</h1>
+                <h4 id="hotel-location">{{ hotel.location }}</h4>
+                <div id="info">
+                    <div id="services">
+                        {% for service in hotel.services %}
+                            {{ service }} {{"" if loop.last else " * "}}
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+            </h1>
+        </div>
+        {% endfor %}
+    </div>
+{% endblock %}

@@ -1,0 +1,47 @@
+version: '3.12.3'
+services:
+  db:
+    image: postgres:15
+    container_name: navigator_db
+    env_file:
+      - .env-non-dev
+    ports:
+      - 5432:5432
+
+  redis:
+    image: redis:7
+    container_name: navigator_redis
+
+  navigator:
+    image: navigator_image
+    build:
+      context: .
+    container_name: navigator_app
+    env_file:
+      - .env-non-dev
+    command: ["/navigator/docker/app.sh"]
+    ports:
+      - 8000:8000
+    depends_on:
+      - db
+      - redis
+
+  celery:
+    build:
+      context: .
+    container_name: navigator_celery
+    command: ["/navigator/docker/celery.sh", "celery"]
+    env_file:
+      - .env-non-dev
+    depends_on:
+      - redis
+
+  flower:
+      build:
+        context: .
+      container_name: navigator_flower
+      command: ["/navigator/docker/celery.sh", "flower"]
+      env_file:
+        - .env-non-dev
+      depends_on:
+        - redis
