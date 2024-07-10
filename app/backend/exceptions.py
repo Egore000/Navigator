@@ -65,3 +65,13 @@ class IncorrectTokenError(BookingException):
 class InvalidDateError(BookingException):
     status_code = status.HTTP_400_BAD_REQUEST
     detail = "Введена неверная дата"
+
+
+class CannotProcessCSVFileError(BookingException):
+    status_code = status.HTTP_500_INTERNAL_SERVER_ERROR
+    detail = "Не удалось обработать csv-файл"
+
+
+class CannotAddDataToDatabaseError(BookingException):
+    status_code = status.HTTP_500_INTERNAL_SERVER_ERROR
+    detail = "Не удалось загрузить данные"

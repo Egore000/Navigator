@@ -1,6 +1,7 @@
 from typing import Any
 
 from sqlalchemy import MappingResult, insert, select, update
+from sqlalchemy.exc import SQLAlchemyError
 
 from app.backend.database import async_session_maker, engine
 from app.backend.exceptions import NotFoundError
@@ -68,8 +69,28 @@ class BaseDAO:
 
     @classmethod
     async def commit(cls, query):
-        logger.debug(query.compile(engine, compile_kwargs={"literal_binds": True}))
+        # logger.debug(query.compile(engine, compile_kwargs={"literal_binds": True}))
         async with async_session_maker() as session:
             result = await session.execute(query)
             await session.commit()
             return result
+
+    @classmethod
+    async def add_bulk(cls, *data):
+        try:
+            query = (
+                insert(cls.model)
+                .values(*data)
+                .returning(cls.model.id)
+            )
+            result = await cls.commit(query)
+            return result.mappings().first()
+        except (SQLAlchemyError, Exception) as exc:
+            if isinstance(exc, SQLAlchemyError):
+                msg = "Database error"
+            elif isinstance(exc, Exception):
+                msg = "Unknown error"
+
+            msg += f": cannot bulk insert data into table {cls.model.__name__}"
+            logger.error(msg, exc_info=True)
+            return None

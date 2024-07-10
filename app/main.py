@@ -14,6 +14,7 @@ from app.backend.database import engine
 from app.backend.hotels.rooms.router import router as router_rooms
 from app.backend.hotels.router import router as router_hotels
 from app.backend.images.router import router as router_images
+from app.backend.importer.router import router as router_import
 from app.backend.pages.router import router as router_pages
 from app.backend.sentry import init_sentry
 from app.backend.users.auth.router import router as router_auth
@@ -33,6 +34,7 @@ app.include_router(router_rooms)
 
 app.include_router(router_pages)
 app.include_router(router_images)
+app.include_router(router_import)
 
 origins = [
     "http://localhost:3000",

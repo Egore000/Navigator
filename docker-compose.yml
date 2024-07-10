@@ -19,7 +19,7 @@ services:
     container_name: navigator_app
     env_file:
       - .env-non-dev
-    command: ["/navigator/docker/app.sh"]
+    command: ["sh", "/navigator/docker/app.sh"]
     ports:
       - 8000:8000
     depends_on:
@@ -30,7 +30,7 @@ services:
     build:
       context: .
     container_name: navigator_celery
-    command: ["/navigator/docker/celery.sh", "celery"]
+    command: ["sh", "/navigator/docker/celery.sh", "celery"]
     env_file:
       - .env-non-dev
     depends_on:
@@ -40,7 +40,7 @@ services:
       build:
         context: .
       container_name: navigator_flower
-      command: ["/navigator/docker/celery.sh", "flower"]
+      command: ["sh", "/navigator/docker/celery.sh", "flower"]
       env_file:
         - .env-non-dev
       depends_on:
