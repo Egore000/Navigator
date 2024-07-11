@@ -6,6 +6,7 @@ from fastapi import APIRouter, UploadFile, Depends
 
 from app.backend.importer.service import TABLE_MODEL_MAP, convert_csv_to_pg
 from app.backend import exceptions
+from app.backend.users.auth.dependencies import get_current_user
 from app.backend.users.permissions import get_current_admin_user
 
 router = APIRouter(
@@ -17,7 +18,7 @@ router = APIRouter(
 @router.post(
     "/{table_name}",
     status_code=201,
-    dependencies=[Depends(get_current_admin_user),],
+    dependencies=[Depends(get_current_user),],
 )
 async def import_data(
         table_name: Literal["hotels", "rooms", "bookings"],

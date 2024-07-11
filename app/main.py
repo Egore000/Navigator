@@ -4,6 +4,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
 
 # from fastapi_versioning import VersionedFastAPI
+from prometheus_fastapi_instrumentator import Instrumentator
 from sqladmin import Admin
 
 from app.backend.admin.auth import authentication_backend
@@ -20,6 +21,7 @@ from app.backend.sentry import init_sentry
 from app.backend.users.auth.router import router as router_auth
 from app.backend.users.router import router as router_users
 from app.config import STATIC
+from app.backend.prometheus.router import router as router_prometheus
 from app.middlewares import LoggingMiddleware
 
 init_sentry()
@@ -35,6 +37,7 @@ app.include_router(router_rooms)
 app.include_router(router_pages)
 app.include_router(router_images)
 app.include_router(router_import)
+app.include_router(router_prometheus)
 
 origins = [
     "http://localhost:3000",
@@ -59,6 +62,12 @@ app.add_middleware(LoggingMiddleware)
 #     version_format="{major}",
 #     prefix_format="/v{major}"
 # )
+
+instrumentator = Instrumentator(
+    should_group_status_codes=False,
+    excluded_handlers=[".*admin.*", "/metrics"]
+)
+instrumentator.instrument(app).expose(app)
 
 admin = Admin(app, engine, authentication_backend=authentication_backend)
 admin.add_view(UserAdmin)
