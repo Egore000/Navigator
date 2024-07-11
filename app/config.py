@@ -52,11 +52,11 @@ class DBSettings(Config):
 
 
 class TestDBSettings(Config):
-    TEST_DB_HOST: str | None = None
-    TEST_DB_PORT: int | None = None
-    TEST_DB_PASS: str | None = None
-    TEST_DB_NAME: str | None = None
-    TEST_DB_USER: str | None = None
+    TEST_DB_HOST: str = ""
+    TEST_DB_PORT: int = 0
+    TEST_DB_PASS: str = ""
+    TEST_DB_NAME: str = ""
+    TEST_DB_USER: str = ""
 
     @property
     def TEST_DATABASE_URL(self):
