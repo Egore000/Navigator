@@ -21,3 +21,23 @@
 10-07-2024 10:21:46 - logger - INFO - Redis connected
 10-07-2024 16:14:19 - logger - INFO - Redis connected
 10-07-2024 20:12:23 - logger - INFO - Redis connected
+11-07-2024 09:16:07 - logger - INFO - Redis connected
+11-07-2024 09:16:16 - logger - INFO - Redis connected
+11-07-2024 11:19:28 - logger - INFO - Redis connected
+11-07-2024 11:20:48 - logger - INFO - Redis connected
+11-07-2024 12:26:15 - logger - INFO - Redis connected
+11-07-2024 12:26:34 - logger - ERROR - Cannot convert CSV to DB format
+Traceback (most recent call last):
+  File "C:\Users\egorp\Projects\FastAPI\app\backend\importer\service.py", line 29, in convert_csv_to_pg
+    print(row)
+  File "C:\Users\egorp\AppData\Local\Programs\Python\Python312\Lib\encodings\cp1251.py", line 19, in encode
+    return codecs.charmap_encode(input,self.errors,encoding_table)[0]
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+UnicodeEncodeError: 'charmap' codec can't encode character '\u2011' in position 129: character maps to <undefined>
+11-07-2024 12:27:23 - logger - INFO - Redis connected
+11-07-2024 12:28:02 - logger - INFO - Redis connected
+11-07-2024 12:28:16 - logger - INFO - Redis connected
+11-07-2024 12:29:08 - logger - INFO - Redis connected
+11-07-2024 12:29:31 - logger - INFO - Redis connected
+11-07-2024 12:29:46 - logger - INFO - Redis connected
+11-07-2024 12:30:49 - logger - INFO - Redis connected
