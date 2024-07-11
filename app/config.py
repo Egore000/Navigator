@@ -40,7 +40,7 @@ class AuthJWT(Config):
 class DBSettings(Config):
     DB_HOST: str
     DB_PORT: int
-    DB_PASS: int
+    DB_PASS: str
     DB_NAME: str
     DB_USER: str
 
