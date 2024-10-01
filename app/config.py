@@ -84,7 +84,7 @@ class RedisSettings(Config):
 class Settings(Config):
     project = ProjectSettings()
     db = DBSettings()
-    # test_db = TestDBSettings()
+    test_db = TestDBSettings()
     auth_jwt = AuthJWT()
     smtp = SMTPSettings()
     redis = RedisSettings()
