@@ -1,5 +1,16 @@
 version: '3.12.3'
 services:
+  nginx:
+    build:
+      context: .
+      dockerfile: "Dockerfile.nginx"
+    container_name: navigator_nginx
+    ports:
+      - 80:80
+      - 443:443
+    links:
+      - navigator
+
   db:
     image: postgres:15
     container_name: navigator_db
@@ -21,7 +32,7 @@ services:
     container_name: navigator_app
     env_file:
       - .env-non-dev
-    command: ["sh", "/navigator/docker/app.sh"]
+    command: sh -c "alembic upgrade head && gunicorn app.main:app --workers 4 --worker-class uvicorn.workers.UvicornWorker --bind=0.0.0.0:8000"
     ports:
       - 8000:8000
     depends_on:
@@ -29,26 +40,39 @@ services:
       - redis
 
   celery:
+    image: navigator_celery
     build:
       context: .
     container_name: navigator_celery
-    command: ["sh", "/navigator/docker/celery.sh", "celery"]
+    command: ["/navigator/docker/celery.sh", "celery"]
+    env_file:
+      - .env-non-dev
+    depends_on:
+      - redis
+
+  celery_beat:
+    image: navigator_celery
+    build:
+      context: .
+    container_name: navigator_celery_beat
+    command: sh -c "celery --app=app.tasks.celery:celery worker -l INFO -B"
     env_file:
       - .env-non-dev
     depends_on:
       - redis
 
   flower:
-      build:
-        context: .
-      container_name: navigator_flower
-      command: ["sh", "/navigator/docker/celery.sh", "flower"]
-      env_file:
-        - .env-non-dev
-      depends_on:
-        - redis
-      ports:
-        - 5555:5555
+    image: navigator_flower
+    build:
+      context: .
+    container_name: navigator_flower
+    command: ["/navigator/docker/celery.sh", "flower"]
+    env_file:
+      - .env-non-dev
+    depends_on:
+      - redis
+    ports:
+      - 5555:5555
 
   prometheus:
     image: prom/prometheus:v2.43.0
