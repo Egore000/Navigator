@@ -10,7 +10,8 @@
 * бронирование номеров
 * отмена уже имеющихся у них броней.
 
-<img src="docs/img/API.png" width="400px">
+<img src="docs/img/API.png" width="400px" alt="API">
+
 ---
 В рамках данного проекта я занимался разработкой backend-
 части сервиса, проектированием API, а также контейнеризацией.
@@ -101,18 +102,18 @@
 
 ### Примеры работы
 
-<img src="docs/img/API_hotels.png" width="400px">
+<img src="docs/img/API_hotels.png" width="400px" alt="API">
 
 #### Админ-панель
 
 * Пользователи
-<img src="docs/img/admin1.png" width="400px">
+<img src="docs/img/admin1.png" width="400px" alt="Пользователи">
 
 * Отели
-<img src="docs/img/admin2.png" width="400px">
+<img src="docs/img/admin2.png" width="400px" alt="Отели">
 
 * Комнаты
-<img src="docs/img/admin3.png" width="400px">
+<img src="docs/img/admin3.png" width="400px" alt="Комнаты">
 
 ### TO-DO
 
