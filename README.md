@@ -1,5 +1,4 @@
 <h1 align="center" style="color: #4CAF50; font-family: 'Segoe Script'">Navigator</h1>
----
 
 ### Описание
 *Navigator* - сервис-аналог Booking.com для бронирования отелей, 
