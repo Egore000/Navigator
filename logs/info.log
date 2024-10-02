@@ -41,3 +41,5 @@ UnicodeEncodeError: 'charmap' codec can't encode character '\u2011' in position 
 11-07-2024 12:29:31 - logger - INFO - Redis connected
 11-07-2024 12:29:46 - logger - INFO - Redis connected
 11-07-2024 12:30:49 - logger - INFO - Redis connected
+02-10-2024 09:01:24 - logger - INFO - Redis connected
+02-10-2024 09:02:59 - logger - INFO - Redis connected

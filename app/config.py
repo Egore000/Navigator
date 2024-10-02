@@ -16,7 +16,7 @@ LOG_DIR = BASE_DIR / "logs"
 
 class Config(BaseSettings):
     class Config:
-        env_file = ".env"
+        env_file = ".env.dev"
 
 
 class ProjectSettings(Config):
